@@ -1,6 +1,6 @@
-import { reactive, readonly } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { useAnnouncer, useKirbyApi } from "./";
+import { reactive, readonly } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useAnnouncer, useKirbyApi } from './'
 
 /**
  * Returns page data by id or the current route path
@@ -9,50 +9,50 @@ import { useAnnouncer, useKirbyApi } from "./";
  * @returns {reactive} The readonly reactive page object
  */
 export default (path) => {
-  const router = useRouter();
-  const { path: currentPath, query } = useRoute();
-  const { hasPage, getPage } = useKirbyApi();
-  const { setAnnouncer } = useAnnouncer();
+  const router = useRouter()
+  const { path: currentPath, query } = useRoute()
+  const { hasPage, getPage } = useKirbyApi()
+  const { setAnnouncer } = useAnnouncer()
 
   // Build page id and trim leading or trailing slashes
-  let id = (path ?? currentPath).replace(/^\/|\/$/g, "");
+  let id = (path ?? currentPath).replace(/^\/|\/$/g, '')
 
   // Get token for draft previews
-  const token = query.token;
+  const token = query.token
 
   // Fall back to homepage if id is empty
-  if (!id) id = "home";
+  if (!id) id = 'home'
 
   // Setup page waiter promise
-  let resolve;
+  let resolve
   const promise = new Promise((r) => {
-    resolve = r;
-  });
+    resolve = r
+  })
 
   // Setup reactive page object
   const page = reactive({
-    __status: "pending",
+    __status: 'pending',
     isReady: false,
-    isReadyPromise: () => promise,
-  });
+    isReadyPromise: () => promise
+  })
 
-  (async () => {
+  ;(async () => {
     // Check if cached page exists (otherwise skip SWR)
-    const isCached = hasPage(id);
+    const isCached = hasPage(id)
     // Get page from cache or freshly fetch it
-    const data = await getPage(id, { token });
+    const data = await getPage(id, { token })
 
     if (!data) {
-      page.__status = "error";
-      return;
+      page.__status = 'error'
+      return
     }
 
     // Check data origin when the hook is used on the current route
     if (!path) {
       // Redirect to error page if data returned *is* the error page
-      if (data.__isErrorPage && currentPath !== "/error") {
-        router.replace({ path: "/error" });
-        return;
+      if (data.__isErrorPage && currentPath !== '/error') {
+        router.replace({ path: '/error' })
+        return
       }
 
       // Redirect to offline page if page hasn't been cached either in-store or
@@ -60,42 +60,38 @@ export default (path) => {
       // Note: data for `home` and `offline` pages are always available since they
       // are precached by the service worker
       if (data.__isOffline) {
-        router.replace({ path: "/offline" });
-        return;
+        router.replace({ path: '/offline' })
+        return
       }
     }
 
     // Append page data to reactive page object
-    Object.assign(page, data);
+    Object.assign(page, data)
 
-    page.__status = "resolved";
-    page.isReady = true;
-    resolve?.();
+    page.__status = 'resolved'
+    page.isReady = true
+    resolve?.()
 
     // Further actions only if the hook was called for the current route
     if (!path) {
       // Set document title
-      document.title = page.metaTitle;
+      document.title = page.metaTitle
 
       // Announce new route
-      setAnnouncer(`Navigated to ${page.title}`);
+      setAnnouncer(`Navigated to ${page.title}`)
     }
 
     // Revalidate the stale asset asynchronously
-    if (
-      import.meta.env.VITE_STALE_WHILE_REVALIDATE === "true" &&
-      isCached &&
-      navigator.onLine
-    ) {
-      const newData = await getPage(id, { revalidate: true });
+    if (import.meta.env.VITE_STALE_WHILE_REVALIDATE === 'true' && isCached && navigator.onLine) {
+      const newData = await getPage(id, { revalidate: true })
 
       if (JSON.stringify(newData) !== JSON.stringify(data)) {
-        Object.assign(page, newData);
+        Object.assign(page, newData)
       }
 
-      page.__status = "revalidated";
+      page.__status = 'revalidated'
     }
-  })();
+  })()
 
-  return readonly(page);
-};
+  return readonly(page)
+}

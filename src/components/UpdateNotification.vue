@@ -1,18 +1,14 @@
 <template>
   <aside aria-live="polite">
-    <button
-      v-if="hasNewWorker"
-      id="update-notification"
-      @click="activateNewWorker"
-    >
+    <button v-if="hasNewWorker" id="update-notification" @click="activateNewWorker">
       New app version available. Click to install.
     </button>
   </aside>
 </template>
 
 <script setup>
-import { useServiceWorker } from "~/hooks";
-const { hasNewWorker, activateNewWorker } = useServiceWorker();
+import { useServiceWorker } from '~/hooks'
+const { hasNewWorker, activateNewWorker } = useServiceWorker()
 </script>
 
 <style>

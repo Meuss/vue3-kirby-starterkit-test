@@ -1,33 +1,28 @@
 <template>
-  <a
-    ref="skipLink"
-    href="#main"
-    class="skip-to-content-link"
-    @click.prevent="navigate"
-  >
+  <a ref="skipLink" href="#main" class="skip-to-content-link" @click.prevent="navigate">
     Skip to content
   </a>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
-const skipLink = ref(null);
-const route = useRoute();
+const skipLink = ref(null)
+const route = useRoute()
 
 watch(route, () => {
-  skipLink.value.focus();
-});
+  skipLink.value.focus()
+})
 
 const navigate = ({ target }) => {
-  const { hash } = target;
+  const { hash } = target
   if (hash) {
-    const element = document.querySelector(hash);
-    element?.scrollIntoView();
-    element?.focus();
+    const element = document.querySelector(hash)
+    element?.scrollIntoView()
+    element?.focus()
   }
-};
+}
 </script>
 
 <style>

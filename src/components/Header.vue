@@ -10,7 +10,7 @@
         :key="page.uri"
         :to="`/${page.uri}`"
         :class="{
-          'router-link-active': route.path.startsWith(`/${page.uri}/`),
+          'router-link-active': route.path.startsWith(`/${page.uri}/`)
         }"
       >
         {{ page.title }}
@@ -20,11 +20,11 @@
 </template>
 
 <script setup>
-import { useRoute } from "vue-router";
-import { useSite } from "~/hooks";
+import { useRoute } from 'vue-router'
+import { useSite } from '~/hooks'
 
-const site = useSite();
-const route = useRoute();
+const site = useSite()
+const route = useRoute()
 </script>
 
 <style>
@@ -57,7 +57,7 @@ const route = useRoute();
   margin: 0 0.75rem;
 }
 
-.menu a[aria-current="page"],
+.menu a[aria-current='page'],
 .menu a.router-link-active {
   border-bottom: 2px solid #000;
 }

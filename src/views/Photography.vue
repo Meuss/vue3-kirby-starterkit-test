@@ -1,16 +1,11 @@
 <template>
   <Intro>{{ page.title }}</Intro>
 
-  <ul
-    v-if="page.isReady"
-    class="albums"
-    :data-even="page.children.length % 2 === 0"
-  >
+  <ul v-if="page.isReady" class="albums" :data-even="page.children.length % 2 === 0">
     <li v-for="album in page.children" :key="album.uri">
       <router-link :to="`/${album.uri}`">
         <figure>
           <img :src="album.cover.url" :alt="album.cover.alt" />
-
           <figcaption>{{ album.title }}</figcaption>
         </figure>
       </router-link>
@@ -20,15 +15,15 @@
 </template>
 
 <script>
-import { usePage } from "~/hooks";
+import { usePage } from '~/hooks'
 
 export default {
   setup() {
     return {
-      page: usePage(),
-    };
-  },
-};
+      page: usePage()
+    }
+  }
+}
 </script>
 
 <style>

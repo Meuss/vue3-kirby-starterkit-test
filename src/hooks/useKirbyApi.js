@@ -1,6 +1,6 @@
-import { useLanguages } from "./";
+import { useLanguages } from './'
 
-const cache = new Map();
+const cache = new Map()
 
 /**
  * Fetch wrapper to request JSON data
@@ -9,14 +9,14 @@ const cache = new Map();
  * @returns {Promise<object>} The JSON content from the response
  */
 const fetcher = async (url) => {
-  const response = await fetch(url);
+  const response = await fetch(url)
 
   if (!response.ok) {
-    throw new Error(`Request ${url} failed with "${response.statusText}".`);
+    throw new Error(`Request ${url} failed with "${response.statusText}".`)
   }
 
-  return await response.json();
-};
+  return await response.json()
+}
 
 /**
  * Builds an API URL for a specific file and language
@@ -25,22 +25,22 @@ const fetcher = async (url) => {
  * @returns {string} The final URL
  */
 const apiUri = (path) => {
-  const { isMultilang, languageCode } = useLanguages();
-  let result = "";
+  const { isMultilang, languageCode } = useLanguages()
+  let result = ''
 
   // Add language path in multi-language setup
   if (isMultilang) {
-    result += `/${languageCode}`;
+    result += `/${languageCode}`
   }
 
   // Add the API path
-  result += `/${import.meta.env.VITE_BACKEND_API_SLUG}`;
+  result += `/${import.meta.env.VITE_BACKEND_API_SLUG}`
 
   // Add the file to fetch
-  result += `/${path}`;
+  result += `/${path}`
 
-  return result;
-};
+  return result
+}
 
 /**
  * Retrieves page data by id from either network or store
@@ -52,48 +52,44 @@ const apiUri = (path) => {
  * @returns {Promise<object|boolean>} The page's data or `false` if fetch request failed
  */
 const getPage = async (id, { revalidate = false, token } = {}) => {
-  let page;
-  const isCached = cache.has(id);
-  const targetUrl = token
-    ? apiUri(`${id}.json?token=${token}`)
-    : apiUri(`${id}.json`);
+  let page
+  const isCached = cache.has(id)
+  const targetUrl = token ? apiUri(`${id}.json?token=${token}`) : apiUri(`${id}.json`)
 
   // Use cached page if present in the store, except when revalidating
   if (!revalidate && isCached) {
     if (import.meta.env.DEV) {
-      console.log(`[getPage] Pulling ${id} page data from cache.`);
+      console.log(`[getPage] Pulling ${id} page data from cache.`)
     }
 
-    return cache.get(id);
+    return cache.get(id)
   }
 
   // Otherwise retrieve page data for the first time
   if (import.meta.env.DEV) {
     console.log(
-      `[getPage] ${
-        revalidate ? `Revalidating ${id} page data.` : `Fetching ${targetUrl}…`
-      }`
-    );
+      `[getPage] ${revalidate ? `Revalidating ${id} page data.` : `Fetching ${targetUrl}…`}`
+    )
   }
 
   try {
-    page = await fetcher(targetUrl);
+    page = await fetcher(targetUrl)
   } catch (error) {
-    console.error(error);
-    return false;
+    console.error(error)
+    return false
   }
 
   if (import.meta.env.DEV && !revalidate) {
-    console.log(`[getPage] Fetched ${id} page data`, page);
+    console.log(`[getPage] Fetched ${id} page data`, page)
   }
 
   // Add page data to the store, respectively overwrite it
   if (!isCached || revalidate) {
-    cache.set(id, page);
+    cache.set(id, page)
   }
 
-  return page;
-};
+  return page
+}
 
 /**
  * Checks if a page has been cached already
@@ -101,7 +97,7 @@ const getPage = async (id, { revalidate = false, token } = {}) => {
  * @param {string} id The page id to look up
  * @returns {boolean} `true` if the page exists
  */
-const hasPage = (id) => cache.has(id);
+const hasPage = (id) => cache.has(id)
 
 /**
  * Returns methods for communication with the backend API
@@ -113,5 +109,5 @@ export default () => ({
   fetcher,
   cache,
   hasPage,
-  getPage,
-});
+  getPage
+})

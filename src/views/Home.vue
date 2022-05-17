@@ -20,27 +20,27 @@
 </template>
 
 <script>
-import { usePage } from "~/hooks";
+import { usePage } from '~/hooks'
 
 export default {
   setup() {
-    const page = usePage();
-    const photography = usePage("photography");
+    const page = usePage()
+    const photography = usePage('photography')
 
     // Example of `isReadyPromise()` page method
-    (async () => {
-      await photography.isReadyPromise();
+    ;(async () => {
+      await photography.isReadyPromise()
       // Do something with the reactive page object
-      console.log("Photography page data has been loaded.");
-      console.log(photography.title);
-    })();
+      console.log('Photography page data has been loaded.')
+      console.log(photography.title)
+    })()
 
     return {
       page,
-      photography,
-    };
-  },
-};
+      photography
+    }
+  }
+}
 </script>
 
 <style>

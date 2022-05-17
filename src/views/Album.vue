@@ -35,15 +35,15 @@
 </template>
 
 <script>
-import { usePage } from "~/hooks";
+import { usePage } from '~/hooks'
 
 export default {
   setup() {
     return {
-      page: usePage(),
-    };
-  },
-};
+      page: usePage()
+    }
+  }
+}
 </script>
 
 <style>
@@ -98,10 +98,10 @@ export default {
 .album-gallery[data-even] {
   grid-template-columns: repeat(4, 1fr);
 }
-.album-gallery[data-count="1"] {
+.album-gallery[data-count='1'] {
   grid-template-columns: 1fr;
 }
-.album-gallery[data-count="2"] {
+.album-gallery[data-count='2'] {
   grid-template-columns: 1fr 1fr;
 }
 </style>

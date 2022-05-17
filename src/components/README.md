@@ -22,12 +22,12 @@ Use your component in your template as you normally would:
 </template>
 
 <script>
-import Intro from "../components/Intro.vue";
+import Intro from '../components/Intro.vue'
 
 export default {
   components: {
-    Intro,
-  },
-};
+    Intro
+  }
+}
 </script>
 ```

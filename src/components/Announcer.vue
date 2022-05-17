@@ -1,14 +1,10 @@
 <template>
-  <div
-    id="announcer"
-    :aria-live="announcer.politeness"
-    v-text="announcer.content"
-  />
+  <div id="announcer" :aria-live="announcer.politeness" v-text="announcer.content" />
 </template>
 
 <script setup>
-import { useAnnouncer } from "~/hooks";
-const { announcer } = useAnnouncer();
+import { useAnnouncer } from '~/hooks'
+const { announcer } = useAnnouncer()
 </script>
 
 <style>
